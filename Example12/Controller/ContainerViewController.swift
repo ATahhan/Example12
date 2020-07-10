@@ -44,12 +44,12 @@ class ContainerViewController: UIViewController {
     }
     
     private func loadStudentLocations() {
-        API.Parser.getStudentLocations { (data) in
+        API.getStudentLocations { (data) in
             guard let data = data else {
                 self.showAlert(title: "Error", message: "No internet connection found")
                 return
             }
-            guard data.studentLocations.count > 0 else {
+            guard data.results.count > 0 else {
                 self.showAlert(title: "Error", message: "No pins found")
                 return
             }

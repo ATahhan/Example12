@@ -24,7 +24,7 @@ class ConfirmLocationViewController: UIViewController {
     
     @IBAction func finishTapped(_ sender: UIButton) {
         
-        API.Parser.postLocation(self.location!) { err  in
+        API.postLocation(self.location!) { err  in
             guard err == nil else {
                 self.showAlert(title: "Error", message: err!)
                 return

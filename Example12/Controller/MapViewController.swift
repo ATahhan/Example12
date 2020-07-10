@@ -27,7 +27,7 @@ class MapViewController: ContainerViewController, MKMapViewDelegate {
     }
     
     func updatePins() {
-        guard let locations = locationsData?.studentLocations else { return }
+        guard let locations = locationsData?.results else { return }
         
         // We will create an MKPointAnnotation for each dictionary in "locations". The
         // point annotations will be stored in this array, and then provided to the map view.
