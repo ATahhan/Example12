@@ -15,7 +15,7 @@ class TableViewController: ContainerViewController {
     override var locationsData: LocationsData? {
         didSet {
             guard let locationsData = locationsData else { return }
-            locations = locationsData.studentLocations
+            locations = locationsData.results
         }
     }
     var locations: [StudentLocation] = [] {

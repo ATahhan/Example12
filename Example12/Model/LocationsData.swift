@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct LocationsData {
-    var studentLocations: [StudentLocation] = []
+struct LocationsData: Codable {
+    var results: [StudentLocation] = []
 }

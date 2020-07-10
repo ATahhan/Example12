@@ -65,52 +65,42 @@ class API {
         // Hint: print out the retreived data in order to find out how you'll traverse the JSON object to get the firstName and lastName
     }
     
-    class Parser {
+    static func getStudentLocations(limit: Int = 100, skip: Int = 0, orderBy: SLParam = .updatedAt, completion: @escaping (LocationsData?)->Void) {
+        guard let url = URL(string: "\(APIConstants.STUDENT_LOCATION)?\(APIConstants.ParameterKeys.LIMIT)=\(limit)&\(APIConstants.ParameterKeys.SKIP)=\(skip)&\(APIConstants.ParameterKeys.ORDER)=-\(orderBy.rawValue)") else {
+            completion(nil)
+            return
+        }
         
-        static func getStudentLocations(limit: Int = 100, skip: Int = 0, orderBy: SLParam = .updatedAt, completion: @escaping (LocationsData?)->Void) {
-            guard let url = URL(string: "\(APIConstants.STUDENT_LOCATION)?\(APIConstants.ParameterKeys.LIMIT)=\(limit)&\(APIConstants.ParameterKeys.SKIP)=\(skip)&\(APIConstants.ParameterKeys.ORDER)=-\(orderBy.rawValue)") else {
-                completion(nil)
-                return
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = HTTPMethod.get.rawValue
-            request.addValue(APIConstants.HeaderValues.PARSE_APP_ID, forHTTPHeaderField: APIConstants.HeaderKeys.PARSE_APP_ID)
-            request.addValue(APIConstants.HeaderValues.PARSE_API_KEY, forHTTPHeaderField: APIConstants.HeaderKeys.PARSE_API_KEY)
-            let session = URLSession.shared
-            let task = session.dataTask(with: request) { data, response, error in
-                var studentLocations: [StudentLocation] = []
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode { //Request sent succesfully
-                    if statusCode >= 200 && statusCode < 300 { //Response is ok
-                        
-                        if let json = try? JSONSerialization.jsonObject(with: data!, options: []),
-                            let dict = json as? [String:Any],
-                            let results = dict["results"] as? [Any] {
-                            
-                            for location in results {
-                                let data = try! JSONSerialization.data(withJSONObject: location)
-                                let studentLocation = try! JSONDecoder().decode(StudentLocation.self, from: data)
-                                studentLocations.append(studentLocation)
-                            }
-                            
-                        }
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.get.rawValue
+        request.addValue(APIConstants.HeaderValues.PARSE_APP_ID, forHTTPHeaderField: APIConstants.HeaderKeys.PARSE_APP_ID)
+        request.addValue(APIConstants.HeaderValues.PARSE_API_KEY, forHTTPHeaderField: APIConstants.HeaderKeys.PARSE_API_KEY)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            var locationsData: LocationsData?
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode { //Request sent succesfully
+                if statusCode >= 200 && statusCode < 300 { //Response is ok
+                    
+                    do {
+                        locationsData = try JSONDecoder().decode(LocationsData.self, from: data!)
+                    } catch {
+                        debugPrint(error)
                     }
                 }
-                
-                DispatchQueue.main.async {
-                    completion(LocationsData(studentLocations: studentLocations))
-                }
-                
             }
-            task.resume()
-        }
-        
-        static func postLocation(_ location: StudentLocation, completion: @escaping (String?)->Void) {
-            // Here you'll implement the logic for posting a student location
-            // Please refere to the roadmap file and classroom for more details
-            // Note that you'll need to send (uniqueKey, firstName, lastName) along with the post request. These information should be obtained upon logging in and they should be saved somewhere (Ex. AppDelegate or in this class)
+            
+            DispatchQueue.main.async {
+                completion(locationsData)
+            }
             
         }
+        task.resume()
+    }
+    
+    static func postLocation(_ location: StudentLocation, completion: @escaping (String?)->Void) {
+        // Here you'll implement the logic for posting a student location
+        // Please refere to the roadmap file and classroom for more details
+        // Note that you'll need to send (uniqueKey, firstName, lastName) along with the post request. These information should be obtained upon logging in and they should be saved somewhere (Ex. AppDelegate or in this class)
         
     }
     
