@@ -60,8 +60,8 @@ class API {
     }
     
     static func getUserInfo(completion: @escaping (Error?)->Void) {
-        // This function is called right after the user logs in successfully
-        // It uses the user's key to retreive the rest of the information (firstName and lastName) and saves it to be used later on posting a location
+        // This function is supposed to be called right after the user logs in successfully
+        // It uses the user's key to retreive the rest of the information (firstName and lastName)
         // Hint: print out the retreived data in order to find out how you'll traverse the JSON object to get the firstName and lastName
     }
     
@@ -100,8 +100,7 @@ class API {
     static func postLocation(_ location: StudentLocation, completion: @escaping (String?)->Void) {
         // Here you'll implement the logic for posting a student location
         // Please refere to the roadmap file and classroom for more details
-        // Note that you'll need to send (uniqueKey, firstName, lastName) along with the post request. These information should be obtained upon logging in and they should be saved somewhere (Ex. AppDelegate or in this class)
-        
+        // Note that you'll need to send uniqueKey along with the post request. This field should be obtained upon logging in and should be saved somewhere (Ex. AppDelegate or in this class)
     }
     
     
